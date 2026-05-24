@@ -22,3 +22,6 @@ env/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Non-essential screenshot image exports
+screenshots/*.jpe

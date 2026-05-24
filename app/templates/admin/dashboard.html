@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h4 class="mb-4"><i class="bi bi-speedometer2 me-2 text-primary"></i>Admin Dashboard</h4>
+
+<!-- Stats Row -->
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm text-white bg-primary">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div><div class="fs-2 fw-bold">{{ stats.users }}</div><div>Users</div></div>
+          <i class="bi bi-people-fill fs-1 opacity-50"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm text-white bg-success">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div><div class="fs-2 fw-bold">{{ stats.students }}</div><div>Students</div></div>
+          <i class="bi bi-mortarboard-fill fs-1 opacity-50"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm text-white bg-info">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div><div class="fs-2 fw-bold">{{ stats.courses }}</div><div>Courses</div></div>
+          <i class="bi bi-journal-bookmark-fill fs-1 opacity-50"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card border-0 shadow-sm text-white bg-secondary">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div><div class="fs-2 fw-bold">{{ stats.audit_events }}</div><div>Audit Events</div></div>
+          <i class="bi bi-card-list fs-1 opacity-50"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Security Controls Status -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-header fw-semibold"><i class="bi bi-shield-check me-2 text-success"></i>Active Security Controls</div>
+  <div class="card-body">
+    <div class="row row-cols-2 row-cols-md-4 g-2">
+      {% for label, icon in [
+        ('AES-256-GCM Encryption','lock-fill'),
+        ('bcrypt Password Hashing','key-fill'),
+        ('TOTP 2FA (RFC 6238)','phone-fill'),
+        ('CSRF Token Protection','shield-fill'),
+        ('SQL Injection Prevention','database-fill-check'),
+        ('XSS Input Sanitisation','funnel-fill'),
+        ('Role-Based Access Control','person-badge-fill'),
+        ('Rate Limiting (DoS)','speedometer'),
+        ('Account Lockout Policy','slash-circle-fill'),
+        ('Audit Logging','journal-text'),
+        ('Secure Session Cookies','cookie'),
+        ('JWT REST API Auth','code-slash'),
+      ] %}
+      <div class="col">
+        <div class="d-flex align-items-center gap-2 small">
+          <i class="bi bi-{{ icon }} text-success"></i>
+          <span>{{ label }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Recent Audit Events -->
+<div class="card border-0 shadow-sm">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="bi bi-clock-history me-2"></i>Recent Audit Events</span>
+    <a href="{{ url_for('admin.audit') }}" class="btn btn-sm btn-outline-secondary">View All</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-sm table-hover mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Time</th><th>User</th><th>Action</th><th>Resource</th><th>Status</th><th>IP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in recent_logs %}
+        <tr>
+          <td class="text-muted small">{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td>{{ log.user.username if log.user else '—' }}</td>
+          <td><code class="small">{{ log.action }}</code></td>
+          <td>{{ log.resource or '—' }}</td>
+          <td>
+            <span class="badge {{ 'bg-success' if log.status == 'success' else 'bg-danger' }}">
+              {{ log.status }}
+            </span>
+          </td>
+          <td class="text-muted small">{{ log.ip_address or '—' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted">No events yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

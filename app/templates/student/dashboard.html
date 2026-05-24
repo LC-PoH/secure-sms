@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}My Student Record{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+  <div class="col-md-7">
+    <h4 class="mb-4"><i class="bi bi-person-badge-fill me-2 text-success"></i>My Student Profile</h4>
+
+    {% if student %}
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-header bg-success text-white">
+        <strong>{{ student.student_number }}</strong> — {{ student.name }}
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label text-muted small">Email</label>
+            <div class="form-control-plaintext">{{ student.email }}</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small">Phone</label>
+            <div class="form-control-plaintext">{{ student.phone }}</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small">Grade</label>
+            <div>
+              <span class="badge fs-6
+                {% if student.grade.startswith('A') %}bg-success
+                {% elif student.grade.startswith('B') %}bg-primary
+                {% else %}bg-secondary{% endif %}">
+                {{ student.grade }}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small">Course</label>
+            <div class="form-control-plaintext">{{ student.course }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="alert alert-success small border-0 shadow-sm">
+      <i class="bi bi-shield-lock-fill me-1"></i>
+      Your personal data is stored encrypted with <strong>AES-256-GCM</strong>
+      and only visible to you and authorised staff.
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      No student record found for your account. Please contact your teacher.
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

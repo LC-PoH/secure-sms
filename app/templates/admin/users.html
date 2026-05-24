@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}User Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4><i class="bi bi-people-fill me-2 text-primary"></i>User Management</h4>
+  <a href="{{ url_for('admin.create_user') }}" class="btn btn-primary">
+    <i class="bi bi-person-plus-fill me-1"></i>New User
+  </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th><th>Username</th><th>Email</th><th>Role</th>
+          <th>2FA</th><th>Active</th><th>Created</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td class="text-muted">{{ u.id }}</td>
+          <td><strong>{{ u.username }}</strong></td>
+          <td>{{ u.email }}</td>
+          <td>
+            <span class="badge
+              {% if u.role == 'admin' %}bg-danger
+              {% elif u.role == 'teacher' %}bg-primary
+              {% else %}bg-success{% endif %}">
+              {{ u.role }}
+            </span>
+          </td>
+          <td>
+            {% if u.is_2fa_enabled %}
+              <span class="badge bg-success"><i class="bi bi-shield-check"></i> ON</span>
+            {% else %}
+              <span class="badge bg-warning text-dark"><i class="bi bi-shield-x"></i> OFF</span>
+            {% endif %}
+          </td>
+          <td>
+            <form method="POST" action="{{ url_for('admin.toggle_active', user_id=u.id) }}" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-sm {{ 'btn-success' if u.is_active else 'btn-secondary' }}"
+                      {% if u.id == current_user.id %}disabled{% endif %}>
+                {{ 'Active' if u.is_active else 'Inactive' }}
+              </button>
+            </form>
+          </td>
+          <td class="text-muted small">{{ u.created_at.strftime('%Y-%m-%d') if u.created_at else '—' }}</td>
+          <td>
+            {% if u.last_login %}
+              <span class="text-muted small" title="Last login">{{ u.last_login.strftime('%Y-%m-%d %H:%M') }}</span>
+            {% else %}
+              <span class="text-muted small">Never</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted">No users found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

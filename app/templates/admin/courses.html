@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4><i class="bi bi-journal-bookmark-fill me-2 text-info"></i>Course Management</h4>
+</div>
+
+<!-- Create Course -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-header fw-semibold">Add New Course</div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('admin.create_course') }}" class="row g-2" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="col-md-3">
+        <input type="text" name="code" class="form-control" placeholder="Course Code (e.g. ICT306)" required maxlength="20">
+      </div>
+      <div class="col-md-5">
+        <input type="text" name="name" class="form-control" placeholder="Course Name" required maxlength="128">
+      </div>
+      <div class="col-md-3">
+        <select name="teacher_id" class="form-select">
+          <option value="">— Assign Teacher —</option>
+          {% for t in teachers %}
+          <option value="{{ t.id }}">{{ t.username }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-1">
+        <button type="submit" class="btn btn-primary w-100">Add</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Course List -->
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-dark">
+        <tr><th>Code</th><th>Name</th><th>Teacher</th><th>Students</th></tr>
+      </thead>
+      <tbody>
+        {% for c in courses %}
+        <tr>
+          <td><strong>{{ c.code }}</strong></td>
+          <td>{{ c.name }}</td>
+          <td>{{ c.teacher.username if c.teacher else '—' }}</td>
+          <td>{{ c.students|length }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center text-muted">No courses yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

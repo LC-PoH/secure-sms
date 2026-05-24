@@ -1,0 +1,24 @@
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local database and runtime artifacts
+*.db
+*.sqlite3
+
+# Sensitive local keys/secrets
+.encryption_key
+.env
+
+# Tooling and OS artifacts
+.pytest_cache/
+.mypy_cache/
+.vscode/
+.DS_Store
+Thumbs.db

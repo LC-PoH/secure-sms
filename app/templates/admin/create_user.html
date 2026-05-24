@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Create User{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-3">
+  <div class="col-md-6">
+    <h4 class="mb-3"><i class="bi bi-person-plus-fill me-2"></i>Create New User</h4>
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <form method="POST" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="mb-3">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+            {% for e in form.username.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="mb-3">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+            {% for e in form.email.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="mb-3">
+            {{ form.role.label(class="form-label") }}
+            {{ form.role(class="form-select" + (" is-invalid" if form.role.errors else "")) }}
+            {% for e in form.role.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="mb-3">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+            {% for e in form.password.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="mb-3">
+            {{ form.confirm.label(class="form-label") }}
+            {{ form.confirm(class="form-control" + (" is-invalid" if form.confirm.errors else "")) }}
+            {% for e in form.confirm.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="alert alert-info small">
+            <strong>Password requirements:</strong> Min 12 chars · Uppercase · Lowercase · Digit · Special char
+          </div>
+          <div class="d-flex gap-2">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('admin.users') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

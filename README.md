@@ -125,9 +125,3 @@ secure-sms/
 
 ---
 
-## Files to Submit
-
-- [ ] `secure-sms/` — entire project folder (all source code)
-- [ ] `REPORT_ICT306_Assessment3.txt` — convert to Word and format
-- [ ] Screenshots of running application (take from browser)
-- [ ] Assessment cover sheet (download from Moodle)
